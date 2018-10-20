@@ -1,0 +1,24 @@
+{
+  "name": "contador",
+  "version": "1.0.0",
+  "description": "A 12-factor counter microservice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lbovet/contador.git"
+  },
+  "keywords": [
+    "12factor",
+    "example",
+    "education"
+  ],
+  "author": "Laurent Bovet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lbovet/contador/issues"
+  },
+  "homepage": "https://github.com/lbovet/contador#readme"
+}
