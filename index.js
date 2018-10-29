@@ -1,6 +1,8 @@
 
 const app = require('express')()
 const moment = require('moment')
+const metrics = require('graphite')
+    .createClient(`plaintext://${process.env.METRIC_HOST}:${process.env.METRIC_PORT}/`)
 const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
 
 const port = process.env.SERVICE_PORT
@@ -10,6 +12,7 @@ var counter = 0;
 app.get('/counter', (req, res) => {    
     counter++;
     log(`Counting: ${counter}`);
+    writeMetric(counter);
     setTimeout( ()=> res.send({counter}), 5000);
 });
 
@@ -34,6 +37,13 @@ function log(message) {
     Object.assign(this, process.env)
     var timestamp = moment().format("YYYY-MM-DD hh:mm:ss,SSS");
     console.log(`${timestamp} ${SYSTEM_INSTANCE} contador ${SYSTEM_ENV} ${SERVICE_INSTANCE} INFO ${message}`);
+}
+
+function writeMetric(counter) {
+    Object.assign(this, process.env)
+    var metric = new Object();
+    metric[`${SYSTEM_INSTANCE}.contador.${SYSTEM_ENV}.${SERVICE_INSTANCE}.counter.value`] = counter;
+    metrics.write(metric);
 }
 
 log(`Process started with PID ${process.pid}`);
