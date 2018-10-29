@@ -6,12 +6,13 @@ const metrics = require('graphite')
 const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
 
 const port = process.env.SERVICE_PORT
+const instanceTraceId = traceId();
 
 var counter = 0;
 
 app.get('/counter', (req, res) => {    
     counter++;
-    log(`Counting: ${counter}`);
+    log(`Counting: ${counter}`, req.headers["x-trace-id"]);
     writeMetric(counter);
     setTimeout( ()=> res.send({counter}), 5000);
 });
@@ -33,10 +34,11 @@ process.on('SIGTERM', () => {
     setTimeout(() => shutdownManager.terminate(() => log('Server gracefully terminated')), 10000);
 });
 
-function log(message) {
+function log(message, traceId) {
+    traceId = traceId || instanceTraceId;
     Object.assign(this, process.env)
     var timestamp = moment().format("YYYY-MM-DD hh:mm:ss,SSS");
-    console.log(`${timestamp} ${SYSTEM_INSTANCE} contador ${SYSTEM_ENV} ${SERVICE_INSTANCE} INFO ${message}`);
+    console.log(`${timestamp} ${SYSTEM_INSTANCE} contador ${SYSTEM_ENV} ${SERVICE_INSTANCE} INFO ${traceId} ${message}`);
 }
 
 function writeMetric(counter) {
@@ -44,6 +46,10 @@ function writeMetric(counter) {
     var metric = new Object();
     metric[`${SYSTEM_INSTANCE}.contador.${SYSTEM_ENV}.${SERVICE_INSTANCE}.counter.value`] = counter;
     metrics.write(metric);
+}
+
+function traceId() {
+    return Math.random().toString(36).substring(2, 8);
 }
 
 log(`Process started with PID ${process.pid}`);
