@@ -9,7 +9,10 @@ app.get('/counter', (req, res) => {
     counter++;
     log(`Counting: ${counter}`);
     res.send({counter});
-})
+});
+
+app.get('/health/ready', (req, res) => res.send());
+app.get('/health/live', (req, res) => res.send());
 
 app.listen(port, () => log(`Listening on port ${port}`));
 
