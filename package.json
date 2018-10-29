@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/lbovet/contador/issues"
   },
-  "homepage": "https://github.com/lbovet/contador#readme"
+  "homepage": "https://github.com/lbovet/contador#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "moment": "^2.22.2"
+  }
 }

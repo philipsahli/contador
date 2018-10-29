@@ -1,14 +1,20 @@
 
 const app = require('express')()
-const port = 3000
+const moment = require('moment')
+const port = process.env.SERVICE_PORT
 
 var counter = 0;
 
-app.get('/counter', (req, res) => {
+app.get('/counter', (req, res) => {    
     counter++;
+    log(`Counting: ${counter}`);
     res.send({counter});
 })
 
-app.listen(port, () => console.log(`Contador listening on port ${port}!`))
+app.listen(port, () => log(`Listening on port ${port}`));
 
-
+function log(message) {
+    Object.assign(this, process.env)
+    var timestamp = moment().format("YYYY-MM-DD hh:mm:ss,SSS");
+    console.log(`${timestamp} ${SYSTEM_INSTANCE} contador ${SYSTEM_ENV} ${SERVICE_INSTANCE} INFO ${message}`);
+}
