@@ -13,16 +13,21 @@ app.get('/counter', (req, res) => {
     setTimeout( ()=> res.send({counter}), 5000);
 });
 
-app.get('/health/ready', (req, res) => res.send());
+var ready = true;
+
+app.get('/health/ready', (req, res) => {
+    res.status(ready ? 200 : 503);
+    res.send();
+});
 app.get('/health/live', (req, res) => res.send());
 
 const server = app.listen(port, () => log(`Listening on port ${port}`));
 const shutdownManager = new GracefulShutdownManager(server);
 
 process.on('SIGTERM', () => {
-    shutdownManager.terminate(() => {
-        log('Server gracefully terminated');
-    });
+    log("Shutdown requested");
+    ready = false;
+    setTimeout(() => shutdownManager.terminate(() => log('Server gracefully terminated')), 10000);
 });
 
 function log(message) {
