@@ -3,17 +3,18 @@ const moment = require('moment')
 const metrics = require('graphite')
     .createClient(`plaintext://${process.env.METRIC_HOST}:${process.env.METRIC_PORT}/`)
 const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
+const redis = require("redis")
+    .createClient({"url": process.env.redis_uri, "password": process.env.redis_password});
 
 const port = process.env.SERVICE_PORT
 const instanceTraceId = traceId();
 
-var counter = 0;
-
 app.get('/counter', (req, res) => {    
-    counter++;
-    log(`Counting: ${counter}`, req.headers["x-trace-id"]);
-    writeMetric(counter);
-    setTimeout( ()=> res.send({counter}), 5000);
+    redis.incr('counter', (err, counter) => {
+        log(`Counting: ${counter}`, req.headers["x-trace-id"]);
+        writeMetric(counter);
+        setTimeout( ()=> res.send({counter}), 5000);
+    });
 });
 
 var ready = true;
