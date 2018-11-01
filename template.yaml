@@ -108,9 +108,9 @@ objects:
                 fieldRef:
                   fieldPath: metadata.name          
             - name: METRIC_HOST
-              value: localhost
+              value: telegraf
             - name: METRIC_PORT
-              value: "2003"
+              value: "17078"
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
