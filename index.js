@@ -1,4 +1,3 @@
-
 const app = require('express')()
 const moment = require('moment')
 const metrics = require('graphite')
@@ -20,10 +19,14 @@ app.get('/counter', (req, res) => {
 var ready = true;
 
 app.get('/health/ready', (req, res) => {
+    log(`Checking readiness: ${ready}`);
     res.status(ready ? 200 : 503);
     res.send();
 });
-app.get('/health/live', (req, res) => res.send());
+app.get('/health/live', (req, res) => {
+    log('Checking liveness');
+    res.send()
+});
 
 const server = app.listen(port, () => log(`Listening on port ${port}`));
 const shutdownManager = new GracefulShutdownManager(server);
