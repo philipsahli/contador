@@ -4,7 +4,11 @@ const metrics = require('graphite')
     .createClient(`plaintext://${process.env.METRIC_HOST}:${process.env.METRIC_PORT}/`)
 const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
 const redis = require("redis")
-    .createClient({"url": process.env.redis_uri, "password": process.env.redis_password});
+    .createClient({
+        "url": process.env.redis_uri,
+        "password": process.env.redis_password,
+        "retry_strategy": () => 1000
+    });
 
 const port = process.env.SERVICE_PORT
 const instanceTraceId = traceId();
@@ -17,7 +21,16 @@ app.get('/counter', (req, res) => {
     });
 });
 
-var ready = true;
+var ready = false;
+
+redis.on('ready', () => {
+    log('Redis is ready');
+    ready = true;
+});
+redis.on('end', () => {
+    log('Redis disconnected');
+    ready = false;
+});
 
 app.get('/health/ready', (req, res) => {
     log(`Checking readiness: ${ready}`);
