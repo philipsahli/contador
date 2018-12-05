@@ -22,6 +22,7 @@ func count(w http.ResponseWriter, r *http.Request) {
 	)
 	graphiteClient.Send(m, string(cs))
 	ti := r.Header.Get("X-Trace-Id")
+	fmt.Fprint(w, result)
 
 	dlog("Counting: "+cs, string(ti))
 }

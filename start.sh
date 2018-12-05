@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# get dependencies
+dep ensure
+
 # compile package and dependencies
 go build src/main.go src/helper.go src/counter.go
 

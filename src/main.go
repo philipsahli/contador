@@ -65,7 +65,7 @@ func main() {
 	r.HandleFunc("/health/live", live).Methods("GET")
 
 	srv := &http.Server{
-		Addr:    "0.0.0.0:8000",
+		Addr:    "0.0.0.0:3000",
 		Handler: r,
 	}
 
