@@ -1,0 +1,50 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  # annotations:
+  #   description: Defines how to build the application
+    # template.alpha.openshift.io/wait-for-ready: 'true'
+  # labels:
+  #   app: gontador
+  #   template: gontador
+  name: gontador-build
+  # namespace: gontador
+spec:
+  # failedBuildsHistoryLimit: 5
+  # nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'gontador:latest'
+  # postCommit:
+  #   script: ./manage.py test
+  # resources: {}
+  # runPolicy: Serial
+  source:
+    git:
+      uri: 'https://github.com/philipsahli/gontador.git'
+      ref: 'go-implementation'
+    type: Git
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+
+      # env:
+      #   - name: PIP_INDEX_URL
+      # from:
+      #   kind: ImageStreamTag
+      #   name: 'python:3.6'
+      #   namespace: openshift
+
+  # successfulBuildsHistoryLimit: 5
+  triggers:
+    - imageChange:
+      type: ImageChange
+    - type: ConfigChange
+    - github:
+        secret: 4tqgB6gCvDQBoWBiKtNcm3NsT37MM602KhLGKrCR
+      type: GitHub
+# status:
+#   lastVersion: 1
+

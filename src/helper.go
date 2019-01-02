@@ -20,7 +20,7 @@ func ready(w http.ResponseWriter, r *http.Request) {
 }
 
 func live(w http.ResponseWriter, r *http.Request) {
-	log.Println("Checking liveness")
+	log.Println("Checking liveness: true")
 }
 
 func randomHex(n int) (string, error) {

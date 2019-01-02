@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: Exposes the gontador service
+  creationTimestamp: '2018-12-31T06:50:19Z'
+  labels:
+    app: gontador
+  name: gontador
+  namespace: gontador
+  resourceVersion: '3000'
+spec:
+  ports:
+    - name: gontador
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: gontador
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
