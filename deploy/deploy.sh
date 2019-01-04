@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash -x
 
 # Build docker image in openshift
 # oc apply -f imagestream.yaml

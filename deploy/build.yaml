@@ -23,7 +23,7 @@ spec:
   source:
     git:
       uri: 'https://github.com/philipsahli/gontador.git'
-      ref: 'go-implementation'
+      ref: 'grpc-service'
     type: Git
   strategy:
     type: Docker
