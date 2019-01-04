@@ -10,6 +10,7 @@
 #   name = "github.com/user/project"
 #   version = "1.0.0"
 #
+
 # [[constraint]]
 #   name = "github.com/user/project2"
 #   branch = "dev"
@@ -24,6 +25,9 @@
 #   go-tests = true
 #   unused-packages = true
 
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
 
 [[constraint]]
   branch = "master"

@@ -6,7 +6,7 @@ metadata:
   creationTimestamp: '2018-12-31T10:24:53Z'
   labels:
     app: gontador
-  name: gontador
+  name: gontador-http
   namespace: gontador
   resourceVersion: '58060'
   selfLink: /apis/route.openshift.io/v1/namespaces/gontador/routes/gontador
@@ -14,10 +14,10 @@ metadata:
 spec:
   host: gontador-gontador.192.168.64.7.nip.io
   port:
-    targetPort: gontador
+    targetPort: gontador-http
   to:
     kind: Service
-    name: gontador
+    name: gontador-http
     weight: 100
   wildcardPolicy: None
 status:

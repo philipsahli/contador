@@ -8,18 +8,40 @@ objects:
   kind: Service
   metadata:
     annotations:
-      description: Exposes the gontador service
-    creationTimestamp: '2018-12-31T06:50:19Z'
+      description: Exposes the gontador grpc service
     labels:
       app: gontador
-    name: gontador
+    name: gontador-grpc
     namespace: gontador
   spec:
     ports:
-      - name: gontador
+      - name: gontador-grpc
+        port: 3001
+        nodePort: 30001
+    selector:
+      app: gontador
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: Exposes the gontador service
+    labels:
+      app: gontador
+    name: gontador-http
+    namespace: gontador
+  spec:
+    ports:
+      - name: gontador-http
         port: 3000
         protocol: TCP
         targetPort: 3000
+      # - name: gontador-grpc
+      #   port: 3001
+      #   protocol: TCP
+      #   targetPort: 3001
     selector:
       app: gontador
     sessionAffinity: None
