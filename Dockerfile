@@ -1,13 +1,18 @@
-FROM docker.tools.pnet.ch/r-base:latest
+FROM golang:latest AS builder
 
-RUN yum install -y nodejs && yum clean all
-USER baseuser
+# Download and install the latest release of dep
+ADD https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 /usr/bin/dep
+RUN chmod +x /usr/bin/dep
 
-WORKDIR /app
-ADD node_modules node_modules
-
-CMD [ "node", "index.js"]
+# Copy the code from the host and compile it
+WORKDIR $GOPATH/src/github.com/philipsahli/gontador/
+COPY Gopkg.toml Gopkg.lock ./
+RUN dep ensure --vendor-only -v
+COPY . ./
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /app github.com/philipsahli/gontador/src
 
 EXPOSE 3000
 
-ADD index.js .
+FROM scratch
+COPY --from=builder /app ./
+ENTRYPOINT ["./app"]

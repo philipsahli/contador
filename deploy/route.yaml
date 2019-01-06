@@ -1,0 +1,31 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: 'true'
+  creationTimestamp: '2018-12-31T10:24:53Z'
+  labels:
+    app: gontador
+  name: gontador-http
+  namespace: gontador
+  resourceVersion: '58060'
+  selfLink: /apis/route.openshift.io/v1/namespaces/gontador/routes/gontador
+  uid: 50250017-0ce6-11e9-8918-2215dd3699dc
+spec:
+  host: gontador-gontador.192.168.64.7.nip.io
+  port:
+    targetPort: gontador-http
+  to:
+    kind: Service
+    name: gontador-http
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - conditions:
+        - lastTransitionTime: '2018-12-31T10:24:54Z'
+          status: 'True'
+          type: Admitted
+      host: gontador-gontador.192.168.64.7.nip.io
+      routerName: router
+      wildcardPolicy: None
