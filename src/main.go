@@ -82,7 +82,7 @@ func main() {
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
 
-	log.Println("grpc started on port 3001")
+	log.Println("gRPC server process started on port 3001")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/counter", count).Methods("GET")
@@ -100,19 +100,21 @@ func main() {
 		}
 	}()
 
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := server{}
-	grpcServer := grpc.NewServer()
-	// pb.CounterServer(grpcServer, &s)
-	pb.RegisterCounterServer(grpcServer, &s)
-	// Register reflection service on gRPC server.
-	reflection.Register(grpcServer)
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+	var grpcServer server
+	// gRPC server service
+	go func() {
+		lis, err := net.Listen("tcp", port)
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+		s := server{}
+		grpcServer = grpc.NewServer()
+		pb.RegisterCounterServer(grpcServer, &s)
+		reflection.Register(grpcServer)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %v", err)
+		}
+	}()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
@@ -122,6 +124,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 	srv.Shutdown(ctx)
+	grpcServer.GracefulStop()
 	log.Println("shutting down")
 	os.Exit(0)
 }
