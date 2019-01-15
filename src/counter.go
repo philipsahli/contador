@@ -8,7 +8,8 @@ import (
 )
 
 func get() int64 {
-	result, err := redisdb.Get("counter1").Result()
+	si := os.Getenv("SERVICE_INSTANCE")
+	result, err := redisdb.Get(si).Result()
 	//time.Sleep(5 * time.Second)
 	if err != nil {
 		panic(err)
@@ -20,7 +21,8 @@ func get() int64 {
 }
 
 func incr() int64 {
-	result, err := redisdb.IncrBy("counter1", 1).Result()
+	si := os.Getenv("SERVICE_INSTANCE")
+	result, err := redisdb.IncrBy(si, 1).Result()
 	if err != nil {
 		panic(err)
 	}
