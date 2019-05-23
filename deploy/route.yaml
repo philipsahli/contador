@@ -12,7 +12,7 @@ metadata:
   selfLink: /apis/route.openshift.io/v1/namespaces/gontador/routes/gontador
   uid: 50250017-0ce6-11e9-8918-2215dd3699dc
 spec:
-  host: gontador-gontador.192.168.64.7.nip.io
+  # host: gontador-gontador.192.168.64.7.nip.io
   port:
     targetPort: gontador
   to:

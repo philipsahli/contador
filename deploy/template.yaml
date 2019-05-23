@@ -105,10 +105,10 @@ objects:
                   fieldRef:
                     # apiVersion: v1
                     fieldPath: metadata.name
-              - name: METRIC_HOST
-                value: 'graphite.gontador.svc'
-              - name: METRIC_PORT
-                value: '2003'
+              # - name: METRIC_HOST
+              #   value: 'graphite.gontador.svc'
+              # - name: METRIC_PORT
+              #   value: '2003'
               - name: REDIS_URL
                 value: 'redis.gontador.svc:6379'
         dnsPolicy: ClusterFirst
@@ -204,76 +204,76 @@ objects:
     test: false
   status: {}
 
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      description: Exposes a dummy graphite
-    creationTimestamp: '2018-12-31T06:50:19Z'
-    labels:
-      app: graphite
-    name: graphite
-    namespace: gontador
-  spec:
-    ports:
-      - name: graphite
-        port: 2003
-        protocol: TCP
-        targetPort: 2003
-    selector:
-      app: graphite
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: graphite
-    name: graphite
-    namespace: gontador
-  spec:
-    replicas: 1
-    selector:
-      app: graphite
-      deploymentconfig: graphite
-    template:
-      metadata:
-        labels:
-          app: graphite
-          deploymentconfig: graphite
-      spec:
-        containers:
-          - image: subfuzion/netcat
-            command: ["nc", "-kvl", "2003"]
-            imagePullPolicy: Always
-            livenessProbe:
-              failureThreshold: 3
-              tcpSocket:
-                port: 2003
-              initialDelaySeconds: 2
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 10
-            name: graphite
-            ports:
-              - containerPort: 2003
-                protocol: TCP
-            readinessProbe:
-              failureThreshold: 3
-              tcpSocket:
-                port: 2003
-              initialDelaySeconds: 2
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 10
-            resources: {}
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-    test: false
-  status: {}
+# - apiVersion: v1
+#   kind: Service
+#   metadata:
+#     annotations:
+#       description: Exposes a dummy graphite
+#     creationTimestamp: '2018-12-31T06:50:19Z'
+#     labels:
+#       app: graphite
+#     name: graphite
+#     namespace: gontador
+#   spec:
+#     ports:
+#       - name: graphite
+#         port: 2003
+#         protocol: TCP
+#         targetPort: 2003
+#     selector:
+#       app: graphite
+#     sessionAffinity: None
+#     type: ClusterIP
+#   status:
+#     loadBalancer: {}
+# - apiVersion: v1
+#   kind: DeploymentConfig
+#   metadata:
+#     labels:
+#       app: graphite
+#     name: graphite
+#     namespace: gontador
+#   spec:
+#     replicas: 1
+#     selector:
+#       app: graphite
+#       deploymentconfig: graphite
+#     template:
+#       metadata:
+#         labels:
+#           app: graphite
+#           deploymentconfig: graphite
+#       spec:
+#         containers:
+#           - image: subfuzion/netcat
+#             command: ["nc", "-kvl", "2003"]
+#             imagePullPolicy: Always
+#             livenessProbe:
+#               failureThreshold: 3
+#               tcpSocket:
+#                 port: 2003
+#               initialDelaySeconds: 2
+#               periodSeconds: 10
+#               successThreshold: 1
+#               timeoutSeconds: 10
+#             name: graphite
+#             ports:
+#               - containerPort: 2003
+#                 protocol: TCP
+#             readinessProbe:
+#               failureThreshold: 3
+#               tcpSocket:
+#                 port: 2003
+#               initialDelaySeconds: 2
+#               periodSeconds: 10
+#               successThreshold: 1
+#               timeoutSeconds: 10
+#             resources: {}
+#             terminationMessagePath: /dev/termination-log
+#             terminationMessagePolicy: File
+#         dnsPolicy: ClusterFirst
+#         restartPolicy: Always
+#         securityContext: {}
+#         terminationGracePeriodSeconds: 30
+#     test: false
+#   status: {}
