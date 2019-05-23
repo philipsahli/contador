@@ -23,7 +23,7 @@ spec:
   source:
     git:
       uri: 'https://github.com/philipsahli/gontador.git'
-      ref: 'go-implementation'
+      ref: 'add-redis-and-netcat-pods'
     type: Git
   strategy:
     type: Docker
