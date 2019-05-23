@@ -9,6 +9,8 @@ Run somewhere
 
     nc -l 2003
 
+This is optional, used only if `METRIC_HOST` and `METRIC_PORT` is set.
+
 ### Redis
 
 Run somewhere

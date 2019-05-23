@@ -20,7 +20,9 @@ func count(w http.ResponseWriter, r *http.Request) {
 		os.Getenv("SYSTEM_ENV"),
 		os.Getenv("SERVICE_INSTANCE"),
 	)
-	graphiteClient.Send(m, string(cs))
+	if graphiteClient != nil {
+		graphiteClient.Send(m, string(cs))
+	}
 	ti := r.Header.Get("X-Trace-Id")
 	fmt.Fprint(w, result)
 

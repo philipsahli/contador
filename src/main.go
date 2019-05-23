@@ -26,16 +26,20 @@ func init() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 
 	// Try to connect a graphite server
-	log.Printf("Init graphite.Client to %s:%s", os.Getenv("METRIC_HOST"), os.Getenv("METRIC_PORT"))
-	port, _ := strconv.Atoi(os.Getenv("METRIC_PORT"))
-	graphiteClient = &graphite.Client{
-		Host:     os.Getenv("METRIC_HOST"),
-		Port:     port,
-		Protocol: "tcp",
-	}
-	err := graphiteClient.Connect()
-	if err != nil {
-		log.Fatal("Could not connect to graphite:", err)
+	if os.Getenv("METRIC_HOST") != "" {
+
+		log.Printf("Init graphite.Client to %s:%s", os.Getenv("METRIC_HOST"), os.Getenv("METRIC_PORT"))
+		port, _ := strconv.Atoi(os.Getenv("METRIC_PORT"))
+		graphiteClient = &graphite.Client{
+			Host:     os.Getenv("METRIC_HOST"),
+			Port:     port,
+			Protocol: "tcp",
+		}
+		err := graphiteClient.Connect()
+		if err != nil {
+			log.Fatal("Could not connect to graphite:", err)
+		}
+
 	}
 }
 
